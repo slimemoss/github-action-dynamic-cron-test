@@ -1,7 +1,7 @@
 name: Reminder
 on:
   schedule:
-    - cron: 59 4 * * *
+    - cron: 15 5 * * *
   workflow_dispatch: null
 jobs:
   reminder:
