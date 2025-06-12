@@ -1,32 +1,21 @@
 name: Reminder
-
-# 定期実行の他に手動実行も可能にしてテストしやすくする
 on:
   schedule:
-    - cron: "0 10 * * 2"  # 初期スケジュール：毎週火曜10時(UTC)
-  workflow_dispatch:
-
+    - cron: 13 2 * * *
+  workflow_dispatch: null
 jobs:
   reminder:
     runs-on: ubuntu-latest
-
     steps:
-      # リポジトリのコードをチェックアウト
       - uses: actions/checkout@v3
-
-      # Python環境セットアップ
       - uses: actions/setup-python@v4
         with:
           python-version: "3.12"
-
-      # Pythonスクリプトで次回スケジュールを生成
       - id: generate
         run: python3 scripts/do_the_thing.py
-
-      # set-cron-schedule-actionで次回のcronを更新
       - uses: gr2m/set-cron-schedule-action@v2
         with:
           token: ${{ secrets.PAT_WITH_WORKFLOW_SCOPE }}
           cron: ${{ steps.generate.outputs.cron_schedule }}
           workflow: my-workflow.yml
-          message: "set next cron schedule dynamically"
+          message: set next cron schedule dynamically
